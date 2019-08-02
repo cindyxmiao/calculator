@@ -6,11 +6,11 @@ const subtract = (a,b) => a-b;
 const multiply = (a,b) => a*b;
 const divide = (a,b) => a/b;
 
-
 var num1 = '';
 var num2 = '';
 var operator;
 var hasOperator = false;
+var hasSolution = false;
 var solution;
 
 
@@ -44,29 +44,45 @@ function writeToDisplay(e, current){
 function runCalculator(input, inputType){
 
     if (inputType ==='number'){
+        if (hasSolution == true) {
+            reset();
+            displayText.textContent = input;
+            hasSolution = false;
+        }
         hasOperator === false? num1 = num1 + input: num2 = num2 += input;
         console.log('num1 is ' + num1);
         console.log('num2 is ' + num2);
     }
     else if (input == 'clear'){
-        num1 = num2 = operator = '';
-        hasOperator = false;
-        displayText.textContent = '';
+        reset();
 
     }
     else if (input == '='){
         solution = operate (operator, Number(num1), Number(num2));
+        reset()
         displayText.textContent = solution;
-        hasOperator = false;
         num1 = solution;
-        num2 = '';
-        operator = '';
+        hasSolution = true;
     }
     //must be operator then
     else {
-        operator = input;
-        hasOperator = true;
+        if (hasOperator === false){
+            hasSolution == true? hasSolution = false:hasSolution =false;
+            operator = input;
+            hasOperator = true;
+        }
+        else {
+            num1 = operate (operator, Number(num1), Number(num2));
+            operator = input;
+            num2 = '';
+        }
     }
+}
+
+const reset = function() {
+    num1 = num2 = operator = '';
+    hasOperator = false;
+    displayText.textContent = '';
 }
 
 buttons.forEach((button)=> {
